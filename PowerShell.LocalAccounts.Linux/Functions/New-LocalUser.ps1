@@ -73,19 +73,19 @@ function New-LocalUser {
         return
     }
 
-    $args = @('--shell', $Shell, '--create-home')
+    $cmdArgs = @('--shell', $Shell, '--create-home')
 
     $gecos = if ($FullName) { $FullName } elseif ($Description) { $Description } else { '' }
-    if ($gecos) { $args += @('--comment', $gecos) }
+    if ($gecos) { $cmdArgs += @('--comment', $gecos) }
 
-    if ($HomeDirectory) { $args += @('--home-dir', $HomeDirectory) }
+    if ($HomeDirectory) { $cmdArgs += @('--home-dir', $HomeDirectory) }
 
     if ($AccountExpires -and -not $AccountNeverExpires) {
-        $args += @('--expiredate', $AccountExpires.ToString('yyyy-MM-dd'))
+        $cmdArgs += @('--expiredate', $AccountExpires.ToString('yyyy-MM-dd'))
     }
 
     if ($PSCmdlet.ShouldProcess($Name, 'New-LocalUser')) {
-        & useradd @args $Name
+        & useradd @cmdArgs $Name
         if ($LASTEXITCODE -ne 0) {
             Write-Error "useradd failed with exit code $LASTEXITCODE for user '$Name'."
             return

@@ -39,9 +39,9 @@ function Rename-LocalUser {
         }
 
         if ($PSCmdlet.ShouldProcess("$Name -> $NewName", 'Rename-LocalUser')) {
-            $args = @('-l', $NewName)
-            if ($MoveHome) { $args += @('-m', '-d', "/home/$NewName") }
-            & usermod @args $Name
+            $cmdArgs = @('-l', $NewName)
+            if ($MoveHome) { $cmdArgs += @('-m', '-d', "/home/$NewName") }
+            & usermod @cmdArgs $Name
             if ($LASTEXITCODE -ne 0) {
                 Write-Error "usermod -l failed with exit code $LASTEXITCODE renaming '$Name' to '$NewName'."
                 return

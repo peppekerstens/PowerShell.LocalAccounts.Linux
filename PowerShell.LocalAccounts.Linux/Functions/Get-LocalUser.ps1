@@ -48,7 +48,7 @@ function Get-LocalUser {
             $uid       = [int]$fields[2]
             $gid       = [int]$fields[3]
             $gecos     = $fields[4]
-            $home      = $fields[5]
+            $homeDir   = $fields[5]
             $shell     = $fields[6]
 
             # Filter by Name patterns
@@ -72,7 +72,7 @@ function Get-LocalUser {
                 if ($passwdStatus -match '^\S+\s+NP\s') {
                     $passwordRequired = $false  # no password
                 }
-            } catch { }
+            } catch { Write-Debug $_.Exception.Message }
 
             # Password expiry via chage -l
             $passwordExpires = $null
@@ -91,13 +91,13 @@ function Get-LocalUser {
                     if ($chageLine -match 'Last password change\s*:\s*(.+)') {
                         $val = $Matches[1].Trim()
                         if ($val -notin 'never', 'password must be changed') {
-                            try { $passwordLastSet = [datetime]::Parse($val, [System.Globalization.CultureInfo]::InvariantCulture) } catch { }
+                            try { $passwordLastSet = [datetime]::Parse($val, [System.Globalization.CultureInfo]::InvariantCulture) } catch { Write-Debug $_.Exception.Message }
                         }
                     }
                     if ($chageLine -match 'Account expires\s*:\s*(.+)') {
                         $val = $Matches[1].Trim()
                         if ($val -ne 'never') {
-                            try { $accountExpires = [datetime]::Parse($val, [System.Globalization.CultureInfo]::InvariantCulture) } catch { }
+                            try { $accountExpires = [datetime]::Parse($val, [System.Globalization.CultureInfo]::InvariantCulture) } catch { Write-Debug $_.Exception.Message }
                         }
                     }
                     if ($chageLine -match 'Password inactive\s*:\s*(.+)') {
@@ -107,7 +107,7 @@ function Get-LocalUser {
                         # passwordChangeableDate = passwordLastSet + minDays
                     }
                 }
-            } catch { }
+            } catch { Write-Debug $_.Exception.Message }
 
             [PSCustomObject]@{
                 PSTypeName              = 'Microsoft.PowerShell.Commands.LocalUser'
@@ -125,7 +125,7 @@ function Get-LocalUser {
                 PasswordChangeableDate = $passwordChangeableDate
                 AccountExpires         = $accountExpires
                 LastLogon              = $null
-                HomeDirectory          = $home
+                HomeDirectory          = $homeDir
                 Shell                  = $shell
                 UID                    = $uid
                 GID                    = $gid
