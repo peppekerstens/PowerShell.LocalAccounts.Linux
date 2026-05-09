@@ -1,5 +1,7 @@
 # PowerShell.LocalAccounts.Linux
 
+[![Pester Tests](https://github.com/peppekerstens/PowerShell.LocalAccounts.Linux/actions/workflows/pester.yml/badge.svg)](https://github.com/peppekerstens/PowerShell.LocalAccounts.Linux/actions/workflows/pester.yml)
+
 > Linux peer module for `Microsoft.PowerShell.LocalAccounts`. Wraps `useradd`, `usermod`, `userdel`, `groupadd`, `groupmod`, `groupdel`, `gpasswd`, and `getent` to provide the full 15-cmdlet surface of the Windows LocalAccounts module on Linux.
 
 Inspired by [Evgenij Smirnov's call to action](https://www.youtube.com/watch?v=RlzinWYIjBY) at the 2025 European PowerShell Summit.
@@ -133,7 +135,29 @@ The `Examples\` folder contains four ready-to-run scripts:
 
 ---
 
-## Version History
+## CI / Testing
+
+Tested across 5 Linux distributions in containers:
+
+| Distro | Image |
+|---|---|
+| Ubuntu 24.04 | `ghcr.io/peppekerstens/testinfra:ubuntu-24.04` |
+| Debian 12 | `ghcr.io/peppekerstens/testinfra:debian-12` |
+| Fedora 40 | `ghcr.io/peppekerstens/testinfra:fedora-40` |
+| openSUSE Tumbleweed | `ghcr.io/peppekerstens/testinfra:opensuse-tumbleweed` |
+| Arch Linux | `ghcr.io/peppekerstens/testinfra:arch-latest` |
+
+Run locally with:
+
+```powershell
+# From the repo root
+docker compose -f docker-compose.test.yml up --abort-on-container-exit
+```
+
+GitHub Actions runs the same matrix on every push — see `.github/workflows/pester.yml`.
+---
+
+## Version history
 
 | Version | Changes |
 |---|---|
