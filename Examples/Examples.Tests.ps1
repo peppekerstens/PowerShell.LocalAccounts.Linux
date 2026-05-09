@@ -100,4 +100,44 @@ Describe 'Examples: PowerShell.LocalAccounts.Linux' {
             $root.Name | Should -Be 'root'
         }
     }
+
+    Context 'Scenario: User provisioning workflow' -Skip:(-not $script:onLinux) {
+        BeforeAll {
+            $script:testUser  = 'pester-test-user'
+            $script:testGroup = 'pester-test-group'
+        }
+        AfterAll {
+            # Clean up — ignore errors if already gone
+            & userdel  $script:testUser  2>$null
+            & groupdel $script:testGroup 2>$null
+        }
+
+        It 'New-LocalUser creates a user' {
+            { New-LocalUser -Name $script:testUser -NoPassword } | Should -Not -Throw
+            Get-LocalUser -Name $script:testUser | Should -Not -BeNullOrEmpty
+        }
+        It 'New-LocalGroup creates a group' {
+            { New-LocalGroup -Name $script:testGroup } | Should -Not -Throw
+            Get-LocalGroup -Name $script:testGroup | Should -Not -BeNullOrEmpty
+        }
+        It 'Add-LocalGroupMember adds user to group' {
+            { Add-LocalGroupMember -Group $script:testGroup -Member $script:testUser } | Should -Not -Throw
+            $members = Get-LocalGroupMember -Group $script:testGroup
+            $members.Name | Should -Contain $script:testUser
+        }
+        It 'Disable-LocalUser disables the user' {
+            { Disable-LocalUser -Name $script:testUser } | Should -Not -Throw
+        }
+        It 'Remove-LocalGroupMember removes user from group' {
+            { Remove-LocalGroupMember -Group $script:testGroup -Member $script:testUser } | Should -Not -Throw
+        }
+        It 'Remove-LocalUser removes the user' {
+            { Remove-LocalUser -Name $script:testUser } | Should -Not -Throw
+            { Get-LocalUser -Name $script:testUser -ErrorAction Stop } | Should -Throw
+        }
+        It 'Remove-LocalGroup removes the group' {
+            { Remove-LocalGroup -Name $script:testGroup } | Should -Not -Throw
+            { Get-LocalGroup -Name $script:testGroup -ErrorAction Stop } | Should -Throw
+        }
+    }
 }
