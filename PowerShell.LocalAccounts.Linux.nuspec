@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2013/05/nuspec.xsd">
+  <metadata>
+    <id>PowerShell.LocalAccounts.Linux</id>
+    <version>0.1.0</version>
+    <authors>peppekerstens</authors>
+    <description>Linux peer module for Microsoft.PowerShell.LocalAccounts. Wraps useradd/usermod/groupadd/getent to provide the full cmdlet surface of the Windows LocalAccounts module on Linux.</description>
+    <tags>PowerShell Linux pwsh Module LocalAccounts</tags>
+    <projectUrl>https://github.com/peppekerstens/PowerShell.LocalAccounts.Linux</projectUrl>
+    <license type="expression">GPL-3.0-only</license>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+  </metadata>
+  <files>
+    <file src="PowerShell.LocalAccounts.Linux\**\*" target="PowerShell.LocalAccounts.Linux" />
+    <file src="PSScriptAnalyzerSettings.psd1" target="PowerShell.LocalAccounts.Linux" />
+  </files>
+</package>
+
+
